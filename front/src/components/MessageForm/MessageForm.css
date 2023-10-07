@@ -1,0 +1,14 @@
+.message-form {
+    padding: 15px;
+    position: relative;
+}
+
+.message-form::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 5%;
+    width: 90%;
+    height: 1px;
+    background-color: #926fd9;
+}

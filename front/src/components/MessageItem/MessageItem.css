@@ -1,0 +1,14 @@
+.message {
+    padding: 10px;
+    margin-bottom: 20px;
+    color: black;
+    background: white;
+    width: fit-content;
+    border-radius: 10px;
+    max-width: 50%;
+}
+
+.sender {
+    align-self: flex-end;
+    background-color: rgba(163, 255, 163, 0.86);
+}

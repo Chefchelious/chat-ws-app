@@ -1,0 +1,7 @@
+.sidebar {
+    color: white;
+    width: 350px;
+    background-color: rgba(14, 1, 26, 0.95);
+    padding: 15px;
+    overflow-y: auto;
+}
