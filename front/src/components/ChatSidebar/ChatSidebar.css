@@ -5,3 +5,12 @@
     padding: 15px;
     overflow-y: auto;
 }
+
+.user-list {
+  list-style: none;
+}
+
+.user-list__item {
+  padding: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.49);
+}

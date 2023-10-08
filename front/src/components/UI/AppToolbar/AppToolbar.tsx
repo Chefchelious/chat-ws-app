@@ -24,7 +24,7 @@ const AppToolbar = () => {
     <AppBar position="sticky" sx={{ mb: pathname.includes('chat') ? 0 : 2 }}>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          <Link to="/">Chat</Link>
+          <Link to="/chat">Chat</Link>
         </Typography>
 
         {user ? <UserMenu user={user} /> : <AnonymousMenu />}

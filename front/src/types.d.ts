@@ -34,3 +34,16 @@ export interface IValidationError {
 export interface IGlobalError {
   error: string;
 }
+
+export interface IConnectedUser {
+  username: string;
+  displayName: string;
+}
+
+export interface IIncomingMessage {
+  type: string;
+  payload: {
+    userList?: IConnectedUser[];
+    newUser: IConnectedUser;
+  };
+}
