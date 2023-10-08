@@ -4,13 +4,14 @@ import ChatWindow from '../../components/ChatWindow/ChatWindow.tsx';
 import MessageForm from '../../components/MessageForm/MessageForm.tsx';
 import { useAppSelector } from '../../app/hook.ts';
 import { selectUser } from '../../features/users/usersSlice.ts';
+import { IConnectedUser, IIncomingMessage, IMessage, IUser } from '../../types';
 import './Chat.tsx.css';
-import { IConnectedUser, IIncomingMessage } from '../../types';
 
 const Chat = () => {
   const user = useAppSelector(selectUser);
   const ws = useRef<WebSocket | null>(null);
   const [users, setUsers] = useState<IConnectedUser[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
 
   useEffect(() => {
     ws.current = new WebSocket(`ws://localhost:8000/chat?token=${user?.token}`);
@@ -21,12 +22,16 @@ const Chat = () => {
       const decodedMessage = JSON.parse(event.data) as IIncomingMessage;
 
       if (decodedMessage.type === 'USER_LIST') {
-        decodedMessage.payload.userList && setUsers(decodedMessage.payload.userList);
+        setUsers(decodedMessage.payload as IUser[]);
       }
 
       if (decodedMessage.type === 'NEW_USER') {
-        decodedMessage.payload.newUser &&
-          setUsers((prevState) => [...prevState, decodedMessage.payload.newUser]);
+        decodedMessage.payload &&
+          setUsers((prevState) => [...prevState, decodedMessage.payload as IUser]);
+      }
+
+      if (decodedMessage.type === 'NEW_MESSAGE') {
+        setMessages((prevState) => [...prevState, decodedMessage.payload as IMessage]);
       }
     };
 
@@ -37,13 +42,28 @@ const Chat = () => {
     };
   }, [user]);
 
+  const sendMessage = (message: string) => {
+    if (!ws.current) return;
+
+    ws.current.send(
+      JSON.stringify({
+        type: 'SEND_MESSAGE',
+        payload: {
+          text: message,
+          authorUsername: user?.username,
+          authorName: user?.displayName,
+        },
+      }),
+    );
+  };
+
   return (
     <div className="chat">
       <ChatSidebar users={users} />
 
       <div className="chat-body">
-        <ChatWindow />
-        <MessageForm />
+        <ChatWindow messages={messages} />
+        <MessageForm onSubmit={sendMessage} />
       </div>
     </div>
   );

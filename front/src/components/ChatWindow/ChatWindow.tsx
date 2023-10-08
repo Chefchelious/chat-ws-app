@@ -1,8 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import MessageItem from '../MessageItem/MessageItem.tsx';
 import './ChatWindow.css';
+import { IMessage } from '../../types';
 
-const ChatWindow = () => {
+interface IProps {
+  messages: IMessage[];
+}
+
+const ChatWindow: React.FC<IProps> = ({ messages }) => {
   const messageWrap = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -14,17 +19,9 @@ const ChatWindow = () => {
   return (
     <div className="chat-window">
       <div className="messages" ref={messageWrap}>
-        <MessageItem text="message 1 dsadasdasd faklmfsd lfm m dsfmf kldsmfkldsm fmdskl mfmsdlk" />
-        <MessageItem text="message 2" />
-        <MessageItem text="message 2" />
-        <MessageItem text="message 2" />
-        <MessageItem text="message 2" />
-        <MessageItem text="message 2" />
-        <MessageItem text="message 2" />
-        <MessageItem text="message 2" />
-        <MessageItem text="message 2" />
-        <MessageItem text="message 2" />
-        <MessageItem text="message 2" />
+        {messages.map((m, idx) => (
+          <MessageItem key={idx} message={m} />
+        ))}
       </div>
     </div>
   );

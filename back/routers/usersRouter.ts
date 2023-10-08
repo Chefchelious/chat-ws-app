@@ -19,6 +19,7 @@ usersRouter.post('/', async (req, res, next) => {
       user: {
         displayName: user.displayName,
         token: user.token,
+        username: user.username,
       },
     });
   } catch (e) {
@@ -52,6 +53,7 @@ usersRouter.post('/sessions', async (req, res, next) => {
       user: {
         displayName: user.displayName,
         token: user.token,
+        username: user.username,
       },
     });
   } catch (e) {

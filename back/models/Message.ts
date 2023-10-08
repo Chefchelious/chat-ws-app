@@ -5,9 +5,12 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  author: {
-    type: mongoose.Types.ObjectId,
-    ref: 'User',
+  authorName: {
+    type: String,
+    required: true,
+  },
+  authorUsername: {
+    type: String,
     required: true,
   },
 });

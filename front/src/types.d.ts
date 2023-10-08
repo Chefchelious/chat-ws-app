@@ -12,6 +12,7 @@ export interface ILoginMutation {
 export interface IUser {
   displayName: string;
   token: string;
+  username: string;
 }
 
 export interface IRegisterResponse {
@@ -40,10 +41,13 @@ export interface IConnectedUser {
   displayName: string;
 }
 
+export interface IMessage {
+  text: string;
+  authorName: string;
+  authorUsername: string;
+}
+
 export interface IIncomingMessage {
   type: string;
-  payload: {
-    userList?: IConnectedUser[];
-    newUser: IConnectedUser;
-  };
+  payload: IUser[] | IUser | IMessage;
 }

@@ -3,11 +3,17 @@ import { Box, Stack, TextField, IconButton } from '@mui/material';
 import SendSharpIcon from '@mui/icons-material/SendSharp';
 import './MessageForm.css';
 
-const MessageForm = () => {
+interface IProps {
+  onSubmit: (message: string) => void;
+}
+
+const MessageForm: React.FC<IProps> = ({ onSubmit }) => {
   const [text, setText] = useState('');
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(text);
+
+    onSubmit(text);
+
     setText('');
   };
 

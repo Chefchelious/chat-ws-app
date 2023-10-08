@@ -2,6 +2,7 @@ import express from 'express';
 import { ActiveConnections, IConnectedUser, IIncomingMessage } from '../types';
 import * as crypto from 'crypto';
 import User from '../models/User';
+import Message from '../models/Message';
 
 const chatRouter = express.Router();
 
@@ -16,9 +17,7 @@ export const chatF = () => {
     ws.send(
       JSON.stringify({
         type: 'USER_LIST',
-        payload: {
-          userList: users,
-        },
+        payload: users,
       }),
     );
     activeConnections[id] = ws;
@@ -43,10 +42,8 @@ export const chatF = () => {
             JSON.stringify({
               type: 'NEW_USER',
               payload: {
-                newUser: {
-                  username: user.username,
-                  displayName: user.displayName,
-                },
+                username: user.username,
+                displayName: user.displayName,
               },
             }),
           );
@@ -55,12 +52,40 @@ export const chatF = () => {
     } catch (e) {
       console.log(e);
     }
-    console.log(users);
 
-    ws.on('message', (msg) => {
+    ws.on('message', async (msg) => {
       const decodedMessage = JSON.parse(msg.toString()) as IIncomingMessage;
 
       switch (decodedMessage.type) {
+        case 'SEND_MESSAGE':
+          Object.keys(activeConnections).forEach((key) => {
+            const conn = activeConnections[key];
+
+            conn.send(
+              JSON.stringify({
+                type: 'NEW_MESSAGE',
+                payload: {
+                  text: decodedMessage.payload.text,
+                  authorName: decodedMessage.payload.authorName,
+                  authorUsername: decodedMessage.payload.authorUsername,
+                },
+              }),
+            );
+          });
+
+          try {
+            const message = new Message({
+              text: decodedMessage.payload.text,
+              authorName: decodedMessage.payload.authorName,
+              authorUsername: decodedMessage.payload.authorUsername,
+            });
+
+            await message.save();
+          } catch (e) {
+            console.log(e);
+          }
+          break;
+
         default:
           console.log('Unknown message type', decodedMessage.type);
       }

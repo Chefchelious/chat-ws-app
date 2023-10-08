@@ -11,14 +11,18 @@ export interface ActiveConnections {
   [id: string]: WebSocket;
 }
 
-export interface IIncomingMessage {
-  type: string;
-  payload: {
-    token?: string;
-  };
+export interface IMessage {
+  text: string;
+  authorName: string;
+  authorUsername: string;
 }
 
 export interface IConnectedUser {
   username: string;
   displayName: string;
+}
+
+export interface IIncomingMessage {
+  type: string;
+  payload: IMessage;
 }
