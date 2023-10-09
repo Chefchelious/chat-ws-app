@@ -20,6 +20,7 @@ export interface IMessage {
 export interface IConnectedUser {
   username: string;
   displayName: string;
+  connectionId: string;
 }
 
 export interface IIncomingMessage {

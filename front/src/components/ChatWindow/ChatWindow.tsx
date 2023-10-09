@@ -14,7 +14,7 @@ const ChatWindow: React.FC<IProps> = ({ messages }) => {
     if (messageWrap.current) {
       messageWrap.current.scrollIntoView({ block: 'end', behavior: 'smooth' });
     }
-  }, []);
+  }, [messages]);
 
   return (
     <div className="chat-window">

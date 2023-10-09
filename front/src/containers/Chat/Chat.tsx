@@ -18,6 +18,10 @@ const Chat = () => {
 
     if (!ws.current) return;
 
+    ws.current.onopen = () => {
+      console.log('yes');
+    };
+
     ws.current.onmessage = (event) => {
       const decodedMessage = JSON.parse(event.data) as IIncomingMessage;
 
@@ -25,9 +29,16 @@ const Chat = () => {
         setUsers(decodedMessage.payload as IUser[]);
       }
 
+      if (decodedMessage.type === 'USER_LOGOUT') {
+        setUsers(decodedMessage.payload as IUser[]);
+      }
+
       if (decodedMessage.type === 'NEW_USER') {
-        decodedMessage.payload &&
-          setUsers((prevState) => [...prevState, decodedMessage.payload as IUser]);
+        setUsers((prevState) => [...prevState, decodedMessage.payload as IUser]);
+      }
+
+      if (decodedMessage.type === 'ALL_MESSAGES') {
+        setMessages(decodedMessage.payload as IMessage[]);
       }
 
       if (decodedMessage.type === 'NEW_MESSAGE') {
@@ -35,7 +46,15 @@ const Chat = () => {
       }
     };
 
-    ws.current.onclose = () => console.log('ws close');
+    ws.current.onclose = (event) => {
+      if (!event.wasClean) {
+        console.log('clean event');
+        setTimeout(() => {
+          console.log('Timeout');
+          ws.current = new WebSocket(`ws://localhost:8000/chat?token=${user?.token}`);
+        }, 3000);
+      }
+    };
 
     return () => {
       ws.current?.close();

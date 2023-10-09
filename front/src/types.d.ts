@@ -49,5 +49,5 @@ export interface IMessage {
 
 export interface IIncomingMessage {
   type: string;
-  payload: IUser[] | IUser | IMessage;
+  payload: IUser[] | IUser | IMessage | IMessage[];
 }

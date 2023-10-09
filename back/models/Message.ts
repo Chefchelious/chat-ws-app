@@ -13,6 +13,11 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  datetime: {
+    type: String,
+    required: true,
+    default: () => new Date().toISOString(),
+  },
 });
 
 const Message = mongoose.model('Message', MessageSchema);
