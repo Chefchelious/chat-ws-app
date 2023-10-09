@@ -21,14 +21,12 @@ const run = async () => {
       displayName: 'Victoria',
       password: '123',
       token: crypto.randomUUID(),
-      phoneNumber: '+996555555555',
     },
     {
       username: 'dim_senpai',
       displayName: 'Dmitrii',
       password: '123',
       token: crypto.randomUUID(),
-      phoneNumber: '+996888888888',
     },
   );
 
