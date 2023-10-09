@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ChatSidebar from '../../components/ChatSidebar/ChatSidebar.tsx';
 import ChatWindow from '../../components/ChatWindow/ChatWindow.tsx';
 import MessageForm from '../../components/MessageForm/MessageForm.tsx';
@@ -13,7 +13,7 @@ const Chat = () => {
   const [users, setUsers] = useState<IConnectedUser[]>([]);
   const [messages, setMessages] = useState<IMessage[]>([]);
 
-  useEffect(() => {
+  const connect = useCallback(() => {
     ws.current = new WebSocket(`ws://localhost:8000/chat?token=${user?.token}`);
 
     if (!ws.current) return;
@@ -51,15 +51,19 @@ const Chat = () => {
         console.log('clean event');
         setTimeout(() => {
           console.log('Timeout');
-          ws.current = new WebSocket(`ws://localhost:8000/chat?token=${user?.token}`);
+          connect();
         }, 3000);
       }
     };
+  }, [user]);
+
+  useEffect(() => {
+    connect();
 
     return () => {
       ws.current?.close();
     };
-  }, [user]);
+  }, [connect]);
 
   const sendMessage = (message: string) => {
     if (!ws.current) return;
